@@ -1,8 +1,11 @@
 spring.application.name: grew-website-server
 
+server:
+  port: ${PORT:8080}
+
 spring:
   profiles:
-    #    active: dev
+    active: dev
     include: secret
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
@@ -16,14 +19,8 @@ spring:
     show-sql: true
     generate-ddl: true
 
-  datasource:
-    url:
-    driver-class-name:
-    username:
-    password:
-
 kakao:
-  client-id:
+  client-id: ${KAKAO_CLIENT_ID}
   redirect-uri: http://localhost:8080/oauth/kakao/callback
   token-uri: https://kauth.kakao.com/oauth/token
   user-info-uri: https://kapi.kakao.com/v2/user/me
