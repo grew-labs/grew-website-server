@@ -24,6 +24,16 @@ WORKDIR /app
 # 빌드된 JAR 복사 (파일명은 상황에 따라 조정하세요)
 COPY --from=builder /app/build/libs/*.jar app.jar
 
+# 빌드 인자 선언
+ARG KAKAO_CLIENT_ID
+ARG DB_URL
+ARG DB_PASSWORD
+
+# 환경변수로 설정
+ENV KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID
+ENV DB_URL=$DB_URL
+ENV DB_PASSWORD=$DB_PASSWORD
+
 
 # 포트 설정 (Render는 PORT=10000 전달함)
 ENV PORT=10000
