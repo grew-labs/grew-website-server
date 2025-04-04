@@ -43,3 +43,4 @@ out/
 .kotlin
 
 *secret.yml
+src/main/resources/.env

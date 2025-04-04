@@ -36,7 +36,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("org.xerial:sqlite-jdbc:3.45.1.0") // 최신 버전 사용
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
