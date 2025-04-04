@@ -6,7 +6,6 @@ server:
 spring:
   profiles:
     active: dev
-    include: secret
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
