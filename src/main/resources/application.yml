@@ -1,6 +1,9 @@
 spring.application.name: grew-website-server
 
 spring:
+  profiles:
+    #    active: dev
+    include: secret
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
@@ -14,7 +17,14 @@ spring:
     generate-ddl: true
 
   datasource:
-    url: jdbc:sqlite:./grew_dev.db
-    driver-class-name: org.sqlite.JDBC
-    username: admin
-    password: admin
+    url:
+    driver-class-name:
+    username:
+    password:
+
+kakao:
+  client-id:
+  redirect-uri: http://localhost:8080/oauth/kakao/callback
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
+
