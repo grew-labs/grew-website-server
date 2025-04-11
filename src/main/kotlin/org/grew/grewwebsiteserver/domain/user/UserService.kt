@@ -1,7 +1,7 @@
 package org.grew.grewwebsiteserver.domain.user
 
-import org.grew.grewwebsiteserver.domain.auth.kakao.UserInfoDto
 import org.grew.grewwebsiteserver.domain.auth.enums.AuthType
+import org.grew.grewwebsiteserver.domain.auth.kakao.UserInfoDto
 import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springframework.stereotype.Service
 
