@@ -23,6 +23,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -39,6 +40,11 @@ dependencies {
 
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("org.xerial:sqlite-jdbc:3.45.1.0") // 최신 버전 사용
+
+    // jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5") // Jackson을 사용할 경우
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
