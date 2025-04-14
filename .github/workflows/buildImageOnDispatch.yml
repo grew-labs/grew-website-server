@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_0.0.${{ github.run_number }}
-  LATEST_IMAGE_NAME: raycho521/grew-server:latest
+  LATEST_IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_latest
 
 
 jobs:
