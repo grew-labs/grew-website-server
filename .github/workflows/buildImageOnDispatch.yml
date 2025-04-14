@@ -1,0 +1,57 @@
+name: Build Image and Push to Dockerhub in account
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+
+env:
+  IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_0.0.${{ github.run_number }}
+  LATEST_IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_latest
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./
+
+    steps:
+      - name: echo initial env values
+        run: |
+          echo $IMAGE_NAME
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '23'
+          distribution: 'corretto'
+
+      - name: Build and test Spring Boot project
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build --no-daemon
+        working-directory: ${{ env.working-directory }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build, tag, and push image to Docker Hub
+        run: |
+          # Build Docker image with version tag
+          docker build -t $IMAGE_NAME .
+
+          # Push version-tagged image
+          docker push $IMAGE_NAME
+
+          # Tag and push latest image
+          docker tag $IMAGE_NAME $LATEST_IMAGE_NAME
+          docker push $LATEST_IMAGE_NAME
+        working-directory: ${{ env.working-directory }}
