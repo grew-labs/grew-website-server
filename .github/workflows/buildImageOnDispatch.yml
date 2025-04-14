@@ -29,13 +29,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '23'
-          distribution: 'adopt'
+          distribution: 'corretto'
 
       - name: Build and test Spring Boot project
         run: |
-          # touch ./src/main/resources/application-test.yml
-          # echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/main/resources/application-test.yml
-          cat ./src/main/resources/application-test.yml
           chmod +x ./gradlew
           ./gradlew build --no-daemon
         working-directory: ${{ env.working-directory }}
