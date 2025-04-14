@@ -96,8 +96,21 @@ class JwtService(
 
     fun reissueAccessToken(refreshToken: String): String? {
         validateToken(refreshToken)  // JWT 서명 및 만료 확인
-        val userId = getUserId(refreshToken)
 
+        val saved = refreshTokenRepository.findByToken(refreshToken)
+            ?: throw IllegalArgumentException("JWT 토큰이 유효하지 않습니다.")
+
+        // DB에 저장된 토큰과 일치하는지 확인
+        if (saved.token != refreshToken)
+            throw IllegalArgumentException("JWT 토큰이 유효하지 않습니다.")
+
+        // ⏰ DB에 저장된 만료시간이 지났으면 삭제 후 null 반환
+        if (saved.expiration.isBefore(LocalDateTime.now())) {
+            refreshTokenRepository.deleteById(getUserId(refreshToken))
+            throw IllegalArgumentException("리프레시 토큰이 만료되었습니다.")
+        }
+
+        val userId = getUserId(refreshToken)
         return createAccessToken(userId)
     }
 
@@ -106,19 +119,6 @@ class JwtService(
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
         } catch (e: Exception) {
             throw IllegalArgumentException("JWT 토큰이 유효하지 않습니다.")
-        }
-
-        val saved = refreshTokenRepository.findByToken(token)
-            ?: throw IllegalArgumentException("JWT 토큰이 유효하지 않습니다.")
-
-        // DB에 저장된 토큰과 일치하는지 확인
-        if (saved.token != token)
-            throw IllegalArgumentException("JWT 토큰이 유효하지 않습니다.")
-
-        // ⏰ DB에 저장된 만료시간이 지났으면 삭제 후 null 반환
-        if (saved.expiration.isBefore(LocalDateTime.now())) {
-            refreshTokenRepository.deleteById(getUserId(token))
-            throw IllegalArgumentException("리프레시 토큰이 만료되었습니다.")
         }
     }
 
