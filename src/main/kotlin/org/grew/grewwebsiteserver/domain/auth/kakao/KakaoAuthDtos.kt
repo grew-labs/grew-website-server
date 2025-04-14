@@ -6,7 +6,7 @@ data class ApiResponse<T>(
     val data: T?
 )
 
-data class AuthResponseDto(
-    val tokenInfo: KakaoTokenResponse,
-    val nickname: String?
+data class UserInfoDto(
+    val userId: Long,
+    val nickname: String
 )
