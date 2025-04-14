@@ -35,11 +35,11 @@ data class Church(
     @Column(name = "worship_times", columnDefinition = "TEXT")
     val worshipTimes: String? = null,
 
-    @Column(name = "location_lat", length = 20)
-    val locationLat: String? = null,
+    @Column(name = "location_lat")
+    val locationLat: Double? = null,
 
-    @Column(name = "location_lng", length = 20)
-    val locationLng: String? = null,
+    @Column(name = "location_lng")
+    val locationLng: Double? = null,
 
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
