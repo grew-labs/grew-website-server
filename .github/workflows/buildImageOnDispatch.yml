@@ -7,8 +7,6 @@ on:
       - 'dev'
 
 env:
-#  ECR_ROOT: ${{ secrets.DOCKER_HUB_URL }}
-#  ECR_REPOSITORY: lgtm
   IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_0.0.${{ github.run_number }}
   LATEST_IMAGE_NAME: raycho521/grew-server:latest
 
@@ -22,8 +20,6 @@ jobs:
     steps:
       - name: echo initial env values
         run: |
-#          echo $ECR_ROOT
-#          echo $ECR_REPOSITORY
           echo $IMAGE_NAME
 
       - name: Checkout repository
@@ -37,8 +33,8 @@ jobs:
 
       - name: Build and test Spring Boot project
         run: |
-#          touch ./src/main/resources/application-test.yml
-#          echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/main/resources/application-test.yml
+          # touch ./src/main/resources/application-test.yml
+          # echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/main/resources/application-test.yml
           cat ./src/main/resources/application-test.yml
           chmod +x ./gradlew
           ./gradlew build --no-daemon
@@ -62,22 +58,3 @@ jobs:
           docker tag $IMAGE_NAME $LATEST_IMAGE_NAME
           docker push $LATEST_IMAGE_NAME
         working-directory: ${{ env.working-directory }}
-
-#      - name: Login to Amazon ECR
-#        id: login-ecr
-#        uses: aws-actions/amazon-ecr-login@v1
-#
-#      - name: Build, tag, and push image to Amazon ECR
-#        id: build-image
-#        run: |
-#          # docker build
-#          docker build -t $IMAGE_NAME .
-#
-#          # upload img(:branch&version) to ECR
-#          docker tag $IMAGE_NAME $ECR_ROOT/$IMAGE_NAME
-#          docker push $ECR_ROOT/$IMAGE_NAME
-#
-#          # upload img(:latest) to ECR
-#          docker tag $IMAGE_NAME $ECR_ROOT/$ECR_REPOSITORY:latest
-#          docker push $ECR_ROOT/$ECR_REPOSITORY:latest
-#        working-directory: ${{ env.working-directory }}
