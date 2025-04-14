@@ -1,0 +1,83 @@
+name: Build Image and Push to Dockerhub in account
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+
+env:
+#  ECR_ROOT: ${{ secrets.DOCKER_HUB_URL }}
+#  ECR_REPOSITORY: lgtm
+  IMAGE_NAME: raycho521/grew-server:${{ github.ref_name }}_0.0.${{ github.run_number }}
+  LATEST_IMAGE_NAME: raycho521/grew-server:latest
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./
+
+    steps:
+      - name: echo initial env values
+        run: |
+#          echo $ECR_ROOT
+#          echo $ECR_REPOSITORY
+          echo $IMAGE_NAME
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '23'
+          distribution: 'adopt'
+
+      - name: Build and test Spring Boot project
+        run: |
+#          touch ./src/main/resources/application-test.yml
+#          echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/main/resources/application-test.yml
+          cat ./src/main/resources/application-test.yml
+          chmod +x ./gradlew
+          ./gradlew build --no-daemon
+        working-directory: ${{ env.working-directory }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build, tag, and push image to Docker Hub
+        run: |
+          # Build Docker image with version tag
+          docker build -t $IMAGE_NAME .
+
+          # Push version-tagged image
+          docker push $IMAGE_NAME
+
+          # Tag and push latest image
+          docker tag $IMAGE_NAME $LATEST_IMAGE_NAME
+          docker push $LATEST_IMAGE_NAME
+        working-directory: ${{ env.working-directory }}
+
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v1
+#
+#      - name: Build, tag, and push image to Amazon ECR
+#        id: build-image
+#        run: |
+#          # docker build
+#          docker build -t $IMAGE_NAME .
+#
+#          # upload img(:branch&version) to ECR
+#          docker tag $IMAGE_NAME $ECR_ROOT/$IMAGE_NAME
+#          docker push $ECR_ROOT/$IMAGE_NAME
+#
+#          # upload img(:latest) to ECR
+#          docker tag $IMAGE_NAME $ECR_ROOT/$ECR_REPOSITORY:latest
+#          docker push $ECR_ROOT/$ECR_REPOSITORY:latest
+#        working-directory: ${{ env.working-directory }}
