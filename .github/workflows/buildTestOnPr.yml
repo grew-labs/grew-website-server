@@ -6,6 +6,11 @@ on:
       - main
       - dev
 
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     name: Build and Test on PR
