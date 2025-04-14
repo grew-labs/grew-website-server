@@ -28,3 +28,10 @@ kakao:
   redirect-uri: http://localhost:8080/oauth/kakao/callback
   token-uri: https://kauth.kakao.com/oauth/token
   user-info-uri: https://kapi.kakao.com/v2/user/me
+
+jwt:
+    secret: jwtsecrettestjwtsecrettestjwtsecrettestjwtsecrettestjwtsecrettestjwtsecrettestjwtsecrettestjwtsecrettest
+    token_expires_in_sec: 3600 # 1 hour
+    refresh_token_expires_in_sec: 1209600 # 14 days
+    header: Authorization
+    prefix: Bearer

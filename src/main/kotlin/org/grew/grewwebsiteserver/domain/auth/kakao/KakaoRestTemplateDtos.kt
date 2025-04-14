@@ -10,7 +10,6 @@ data class KakaoTokenResponse(
     @JsonProperty("refresh_token_expires_in") val refreshTokenExpiresIn: Int?
 )
 
-
 data class KakaoUserInfo(
     @JsonProperty("id") val id: Long,
     @JsonProperty("kakao_account") val kakaoAccount: KakaoAccount,
