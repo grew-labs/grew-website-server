@@ -12,47 +12,47 @@ data class Church(
     val id: Long = 0,
 
     @Column(nullable = false, length = 100)
-    val name: String,
+    var name: String,
 
     @Column(name = "pastor_name", length = 100)
-    val pastorName: String? = null,
+    var pastorName: String? = null,
 
     @Column(name = "website_url", length = 255)
-    val websiteUrl: String? = null,
+    var websiteUrl: String? = null,
 
     @Column(length = 255)
-    val address: String? = null,
+    var address: String? = null,
 
     @Column(length = 100)
-    val email: String? = null,
+    var email: String? = null,
 
     @Column(length = 50)
-    val phone: String? = null,
+    var phone: String? = null,
 
     @Column(columnDefinition = "TEXT")
-    val description: String? = null,
+    var description: String? = null,
 
     @Column(name = "worship_times", columnDefinition = "TEXT")
-    val worshipTimes: String? = null,
+    var worshipTimes: String? = null,
 
     @Column(name = "location_lat")
-    val locationLat: Double? = null,
+    var locationLat: Double? = null,
 
     @Column(name = "location_lng")
-    val locationLng: Double? = null,
+    var locationLng: Double? = null,
 
     @Column(name = "created_at", updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "updated_by")
-    val updatedBy: Long? = null,
+    var updatedBy: Long? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: EntityStatus = EntityStatus.ACTIVE
+    var status: EntityStatus = EntityStatus.ACTIVE
 ) {
     @PreUpdate
     fun preUpdate() {
