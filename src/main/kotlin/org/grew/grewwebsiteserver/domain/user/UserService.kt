@@ -10,7 +10,7 @@ class UserService(
     private val userRepository: UserRepository
 ) {
 
-    public fun saveOrUpdate(userInfo: UserInfoDto, authType: AuthType): User {
+    fun saveOrUpdate(userInfo: UserInfoDto, authType: AuthType): User {
 
         val user = userRepository.findByUserId(userInfo.userId)
             ?.apply {
@@ -26,4 +26,9 @@ class UserService(
 
         return userRepository.save(user)
     }
+
+    fun getUserByUserId(userId: Long): User? {
+        return userRepository.findByUserId(userId)
+    }
+
 }

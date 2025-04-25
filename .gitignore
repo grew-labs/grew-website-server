@@ -44,3 +44,4 @@ out/
 
 *secret.yml
 *.env
+*.sql

@@ -33,7 +33,7 @@ class KakaoAuthService(
         // 3. 회원가입 또는 로그인 처리
         val user = userService.saveOrUpdate(UserInfoDto(userInfo.id, userInfo.nickname), AuthType.KAKAO)
         // 4. 엑세스 토큰 발급
-        val tokenResponse = jwtService.createTokenInfo(userInfo.id)
+        val tokenResponse = jwtService.createTokenInfo(user)
 
         return AuthResponseDto(tokenInfo = tokenResponse, nickname = userInfo.nickname)
     }

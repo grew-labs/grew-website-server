@@ -1,17 +1,17 @@
 package org.grew.grewwebsiteserver.domain.hello
 
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import org.grew.grewwebsiteserver.domain.auth.Login
 import org.grew.grewwebsiteserver.domain.hello.dto.PostHelloDto
 import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springdoc.core.service.SecurityService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,7 +33,7 @@ class HelloController(
             )
         ]
     )
-    @GetMapping("/hello")
+    @GetMapping("/api/hello")
     fun hello(): String {
         return helloService.hello()
     }
@@ -49,7 +49,7 @@ class HelloController(
             ApiResponse(responseCode = "400", description = "Invalid request body", content = [Content()])
         ]
     )
-    @PostMapping("/hello")
+    @PostMapping("/api/hello")
     fun helloPost(@RequestBody postHelloDto: PostHelloDto): String {
         return helloService.hello(postHelloDto.name)
     }
@@ -59,10 +59,20 @@ class HelloController(
         description = "인증된 사용자만 접근할 수 있는 API입니다. JWT 토큰을 통해 인증된 사용자 정보를 반환합니다.",
         security = [SecurityRequirement(name = "Authorization")]
     )
-    @GetMapping("/hello/private")
-    fun helloPrivate(@Parameter(hidden = true) @Login user: User?): ResponseEntity<String> {
-        return user?.let {
-            ResponseEntity.ok("success! user name: ${it.name}")
-        } ?: ResponseEntity.badRequest().body("유저 정보를 찾을 수 없습니다.")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/api/hello/private")
+    fun helloPrivate(@AuthenticationPrincipal user: User): ResponseEntity<String> {
+        return ResponseEntity.ok("success! user name: ${user.name}, roles: ${user.role}")
+    }
+
+    @Operation(
+        summary = "Hello Admin API",
+        description = "ADMIN 권한을 가진 사용자만 접근할 수 있는 API입니다. JWT 토큰을 통해 인증된 사용자 정보를 반환합니다.",
+        security = [SecurityRequirement(name = "Authorization")]
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/hello")
+    fun helloAdmin(@AuthenticationPrincipal user: User): ResponseEntity<String> {
+        return ResponseEntity.ok("success! user name: ${user.name}, roles: ${user.role}")
     }
 }
