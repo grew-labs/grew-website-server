@@ -3,6 +3,7 @@ package org.grew.grewwebsiteserver.domain.user.entity
 import jakarta.persistence.*
 import org.grew.grewwebsiteserver.common.EntityStatus
 import org.grew.grewwebsiteserver.domain.auth.enums.AuthType
+import org.grew.grewwebsiteserver.domain.auth.enums.UserRole
 import java.time.LocalDateTime
 
 @Entity
@@ -24,6 +25,10 @@ data class User(
 
     @Column(unique = true, length = 100)
     val email: String? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
+    val role: UserRole = UserRole.USER, // 기본값은 USER로 설정
 
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
