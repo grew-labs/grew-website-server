@@ -6,6 +6,9 @@ server:
 spring:
   profiles:
     active: dev
+  sql:
+    init:
+      mode: always
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
@@ -17,6 +20,7 @@ spring:
         globally_quoted_identifiers: true
     show-sql: true
     generate-ddl: true
+    defer-datasource-initialization: true # (테스트용) data.sql 사용시에만 적용
 
 kakao:
   client-id: ${KAKAO_CLIENT_ID}

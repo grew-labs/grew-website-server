@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.grew.grewwebsiteserver.common.Log
 import org.grew.grewwebsiteserver.domain.auth.entity.RefreshToken
+import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -34,9 +35,13 @@ class JwtService(
         refreshTokenValidityInMillySeconds = refreshTokenExpiresInSec * 1000
     }
 
-    fun createTokenInfo(userId: Long): TokenResponse {
-        val accessToken = createAccessToken(userId)
-        val refreshToken = createRefreshToken(userId)
+    fun createTokenInfo(user: User): TokenResponse {
+        val roles = listOf(user.role).map { it.name }// listOf(user.authType.name) // 또는 user.roles.map { it.name } 등으로 확장
+        val userId = requireNotNull(user.userId) { "userId must not be null" }
+
+        val accessToken = createAccessToken(userId, roles)
+        val refreshToken = createRefreshToken(userId, roles)
+
         return TokenResponse(
             tokenType = "Bearer",
             accessToken = accessToken,
@@ -49,7 +54,7 @@ class JwtService(
     fun refreshTokenInfo(refreshToken: String): TokenResponse {
         val accessToken = reissueAccessToken(refreshToken)
             ?: throw IllegalArgumentException("유효하지 않은 리프레쉬 토큰입니다.")
-        val refreshToken = createRefreshToken(getUserId(refreshToken))
+        val refreshToken = createRefreshToken(getUserId(refreshToken), getAuthorizations(refreshToken))
         return TokenResponse(
             tokenType = "Bearer",
             accessToken = accessToken,
@@ -60,10 +65,11 @@ class JwtService(
     }
 
 
-    fun createAccessToken(userId: Long): String {
+    fun createAccessToken(userId: Long, roles: List<String>): String {
         val validity = Date(System.currentTimeMillis() + tokenValidityInMillySeconds)
         return Jwts.builder()
             .setSubject(userId.toString())
+            .claim("authorizations", roles)  // ✅ 권한 리스트 추가
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact()
@@ -76,10 +82,31 @@ class JwtService(
         return body.subject.toLong()
     }
 
-    fun createRefreshToken(userId: Long): String {
+    fun getAuthorizations(token: String): List<String> {
+        return try {
+            val claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .body
+
+            val rawRoles = claims["authorizations"]
+            when (rawRoles) {
+                is List<*> -> rawRoles.filterIsInstance<String>() // ["USER", "ADMIN"] 형태
+                is String -> listOf(rawRoles)                    // "USER" 단일 문자열일 경우
+                else -> emptyList()
+            }
+        } catch (e: Exception) {
+            log.error("권한 파싱 중 오류 발생: ${e.message}")
+            emptyList()
+        }
+    }
+
+    fun createRefreshToken(userId: Long, roles: List<String>): String {
         val validity = Date(System.currentTimeMillis() + refreshTokenValidityInMillySeconds)
         val refreshTokenString = Jwts.builder()
             .setSubject(userId.toString())
+            .claim("authorizations", roles)  // ✅ 권한 리스트 추가
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact()
@@ -110,8 +137,10 @@ class JwtService(
             throw IllegalArgumentException("리프레시 토큰이 만료되었습니다.")
         }
 
-        val userId = getUserId(refreshToken)
-        return createAccessToken(userId)
+        return createAccessToken(
+            getUserId(refreshToken),
+            getAuthorizations(refreshToken)
+        )
     }
 
     fun validateToken(token: String) {
