@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
+    kotlin("plugin.serialization") version "1.9.25"
 }
 
 group = "org.grew"
@@ -27,6 +28,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter-security")
+
+    // json
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
     // db for dev
     implementation("org.xerial:sqlite-jdbc")
