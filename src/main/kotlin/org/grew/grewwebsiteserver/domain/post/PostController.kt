@@ -5,13 +5,7 @@ import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/posts")
@@ -48,6 +42,16 @@ class PostController(
             ResponseEntity.ok(ApiResponse.success(data))
         } catch (e: Exception) {
             ResponseEntity.ok(ApiResponse.failure("게시물 업데이트 중 오류가 발생했습니다. ${e.message}"))
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletePost(@PathVariable id: Long): ResponseEntity<ApiResponse<Long>> {
+        return try {
+            postService.deletePost(postId = id)
+            ResponseEntity.ok(ApiResponse.success(id))
+        } catch (e: Exception) {
+            ResponseEntity.ok(ApiResponse.failure("게시물 삭제 중 오류가 발생했습니다. ${e.message}"))
         }
     }
 }
