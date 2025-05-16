@@ -5,6 +5,7 @@ import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
 import org.grew.grewwebsiteserver.domain.post.entity.Post
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class PostService(
@@ -14,8 +15,9 @@ class PostService(
         return postRepository.findAll().toList().map { PostResponseDto.from(entity = it) }
     }
 
-    fun getPostByPostId(postId: Long): PostResponseDto? {
-        val entity = postRepository.findByPostId(postId) ?: return null
+    fun getPostByPostId(postId: Long): PostResponseDto {
+        val entity = postRepository.findById(postId).getOrNull()
+            ?: throw IllegalArgumentException("id에 해당하는 게시물이 없습니다.")
         return PostResponseDto.from(entity = entity)
     }
 
@@ -30,8 +32,12 @@ class PostService(
     }
 
     fun updatePost(postId: Long, request: PostUpdateRequestDto): PostResponseDto {
-        val entity = postRepository.findByPostId(postId) ?: throw IllegalArgumentException("id에 해당하는 게시물이 없습니다.")
-        entity.update(title = request.title, contents = request.contents.map { it.toJsonString() })
+        val entity = postRepository.findById(postId).getOrNull()
+            ?: throw IllegalArgumentException("id에 해당하는 게시물이 없습니다.")
+        entity.update(
+            title = request.title,
+            contents = request.contents.map { it.toJsonString() }
+        )
         return PostResponseDto.from(entity = entity)
     }
 

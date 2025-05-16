@@ -5,5 +5,4 @@ import org.springframework.data.repository.CrudRepository
 
 interface PostRepository: CrudRepository<Post, Long> {
 
-    fun findByPostId(postId: Long): Post?
 }

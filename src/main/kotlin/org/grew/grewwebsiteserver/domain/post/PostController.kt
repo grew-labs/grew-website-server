@@ -1,11 +1,16 @@
 package org.grew.grewwebsiteserver.domain.post
 
+import org.grew.grewwebsiteserver.common.Res
+import org.grew.grewwebsiteserver.common.Response
+import org.grew.grewwebsiteserver.common.ResponseBody
+import org.grew.grewwebsiteserver.common.ResponseDto
 import org.grew.grewwebsiteserver.domain.auth.kakao.ApiResponse
 import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.IllegalArgumentException
 
 @RestController
 @RequestMapping("/api/posts")
@@ -14,44 +19,56 @@ class PostController(
 ) {
 
     @GetMapping("/{id}")
-    fun getPost(@PathVariable id: Long): ResponseEntity<ApiResponse<PostResponseDto>> {
-        val data = postService.getPostByPostId(postId = id) ?: return ResponseEntity.ok(ApiResponse.failure("id에 해당하는 게시물이 없습니다."))
-        return ResponseEntity.ok(ApiResponse.success(data))
+    fun getPost(@PathVariable id: Long): ResponseDto<PostResponseDto> {
+        return try {
+            val data = postService.getPostByPostId(postId = id)
+            Response.success(data)
+        } catch (e: IllegalArgumentException) {
+            Response.failure(errorMessage = e.message)
+        } catch (e: Exception) {
+            Response.unexpectedException(e)
+        }
     }
 
     @GetMapping
-    fun getPosts(): ResponseEntity<ApiResponse<List<PostResponseDto>>> {
-        val data = postService.getPosts()
-        return ResponseEntity.ok(ApiResponse.success(data))
+    fun getPosts(): ResponseDto<List<PostResponseDto>> {
+        return try {
+            val data = postService.getPosts()
+            Response.success(data)
+        }  catch (e: Exception) {
+            Response.unexpectedException(e)
+        }
     }
 
     @PostMapping
-    fun createPost(@RequestBody request: PostCreateRequestDto): ResponseEntity<ApiResponse<PostResponseDto>> {
+    fun createPost(@RequestBody request: PostCreateRequestDto): ResponseDto<PostResponseDto> {
         return try {
             val data = postService.createPost(request = request)
-            ResponseEntity.ok(ApiResponse.success(data))
+            Response.success(data)
         } catch (e: Exception) {
-            ResponseEntity.ok(ApiResponse.failure("게시물 생성 중 오류가 발생했습니다. ${e.message}"))
+            Response.unexpectedException(e)
         }
     }
 
     @PatchMapping("/{id}")
-    fun updatePost(@PathVariable id: Long, @RequestBody request: PostUpdateRequestDto): ResponseEntity<ApiResponse<PostResponseDto>> {
+    fun updatePost(@PathVariable id: Long, @RequestBody request: PostUpdateRequestDto): ResponseDto<PostResponseDto> {
         return try {
             val data = postService.updatePost(postId = id, request = request)
-            ResponseEntity.ok(ApiResponse.success(data))
+            Response.success(data)
+        } catch (e: IllegalArgumentException) {
+            Response.failure(errorMessage = e.message)
         } catch (e: Exception) {
-            ResponseEntity.ok(ApiResponse.failure("게시물 업데이트 중 오류가 발생했습니다. ${e.message}"))
+            Response.unexpectedException(e)
         }
     }
 
     @DeleteMapping("/{id}")
-    fun deletePost(@PathVariable id: Long): ResponseEntity<ApiResponse<Long>> {
+    fun deletePost(@PathVariable id: Long): ResponseDto<Long> {
         return try {
             postService.deletePost(postId = id)
-            ResponseEntity.ok(ApiResponse.success(id))
+            Response.success(id)
         } catch (e: Exception) {
-            ResponseEntity.ok(ApiResponse.failure("게시물 삭제 중 오류가 발생했습니다. ${e.message}"))
+            Response.unexpectedException(e)
         }
     }
 }
