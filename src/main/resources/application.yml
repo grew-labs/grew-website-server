@@ -34,3 +34,15 @@ jwt:
   refresh_token_expires_in_sec: 1209600 # 14 days
   header: Authorization
   prefix: Bearer
+
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2  # 예: 서울 리전
+    s3:
+      bucket: grew-website-resource
+
