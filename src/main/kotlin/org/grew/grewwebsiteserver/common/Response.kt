@@ -16,7 +16,7 @@ class Response {
         // statusCode: 200
         fun <T> success(data: T): ResponseEntity<Body<T>> {
             val body = Body(result = "SUCCESS", data = data, errorCode = null, errorMessage = null)
-            return ResponseEntity.ok(body)
+            return ResponseEntity.status(200).body(body)
         }
 
         // statusCode: 400

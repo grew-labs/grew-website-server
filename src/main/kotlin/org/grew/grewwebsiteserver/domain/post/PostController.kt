@@ -1,14 +1,10 @@
 package org.grew.grewwebsiteserver.domain.post
 
-import org.grew.grewwebsiteserver.common.Res
 import org.grew.grewwebsiteserver.common.Response
-import org.grew.grewwebsiteserver.common.ResponseBody
 import org.grew.grewwebsiteserver.common.ResponseDto
-import org.grew.grewwebsiteserver.domain.auth.kakao.ApiResponse
 import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 
