@@ -29,7 +29,7 @@ sealed class PostContentDto {
     @SerialName("image")
     data class Image(
         val imageUrl: String,
-        val mediaType: String
+        val contentType: String
     ): PostContentDto()
 
     fun toJsonString(): String {
