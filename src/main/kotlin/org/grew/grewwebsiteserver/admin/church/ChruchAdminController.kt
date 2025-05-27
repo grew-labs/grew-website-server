@@ -52,7 +52,7 @@ class ChruchAdminController(
                 )
             ]
         ),
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
     // @PreAuthorize("hasRole('ADMIN')")
     fun addChruch(@RequestBody churchInfo: PostChurchRequestDto): ResponseEntity<ApiResponse<PostChurchResponseDto>> {
@@ -109,7 +109,7 @@ class ChruchAdminController(
                 )
             ]
         ),
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
     // @PreAuthorize("hasRole('ADMIN')")
     fun updateChurch(
@@ -138,7 +138,7 @@ class ChruchAdminController(
                 example = "1"
             )
         ],
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
     // @PreAuthorize("hasRole('ADMIN')")
     fun deleteChurch(@PathVariable id: Long): ResponseEntity<ApiResponse<Unit>> {

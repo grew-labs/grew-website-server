@@ -18,7 +18,7 @@ class UserController {
     @Operation(
         summary = "Get User Info",
         description = "Retrieve the authenticated user's information.",
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
     // @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     fun getUserInfo(@AuthenticationPrincipal user: User): ResponseEntity<UserResponseDto> {
