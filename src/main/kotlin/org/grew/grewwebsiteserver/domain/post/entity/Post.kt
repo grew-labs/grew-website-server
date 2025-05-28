@@ -17,9 +17,8 @@ data class Post(
     @Column(nullable = false, unique = false)
     var title: String,
 
-    // 저장되는 값은 jsonString
     @Column(nullable = false, unique = false)
-    var contents: List<String>,
+    var content: String,
 
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
@@ -28,9 +27,9 @@ data class Post(
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
 
-    fun update(title: String, contents: List<String>) {
+    fun update(title: String, content: String) {
         this.title = title
-        this.contents = contents
+        this.content = content
         this.updatedAt = LocalDateTime.now()
     }
 }

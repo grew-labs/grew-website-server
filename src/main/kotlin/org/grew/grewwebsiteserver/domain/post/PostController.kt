@@ -5,6 +5,7 @@ import org.grew.grewwebsiteserver.common.ResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 
@@ -37,6 +38,7 @@ class PostController(
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     fun createPost(@RequestBody request: PostCreateRequestDto): ResponseDto<PostResponseDto> {
         return try {
             val data = postService.createPost(request = request)
@@ -47,6 +49,7 @@ class PostController(
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updatePost(@PathVariable id: Long, @RequestBody request: PostUpdateRequestDto): ResponseDto<PostResponseDto> {
         return try {
             val data = postService.updatePost(postId = id, request = request)
@@ -59,6 +62,7 @@ class PostController(
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun deletePost(@PathVariable id: Long): ResponseDto<Long> {
         return try {
             postService.deletePost(postId = id)

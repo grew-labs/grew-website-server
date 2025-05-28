@@ -15,6 +15,7 @@ class ResourceController(
     private val resourceService: ResourceService
 ) {
 
+
     @PostMapping("/uploadUrl")
     fun generateUploadUrl(@RequestBody request: ResourceUploadUrlRequestDto): ResponseDto<ResourceUploadUrlDto> {
         return try {
