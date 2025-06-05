@@ -16,8 +16,8 @@ spring:
     generate-ddl: false  # DDL 생성 비활성화 (자동 테이블 생성을 피하기 위해)
 
   datasource:
-    url: ${DB_URL}  # MySQL 데이터베이스 URL (예: jdbc:mysql://localhost:3306/mydatabase)
-    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL JDBC 드라이버
+    url: ${DB_URL}  # MariaDB 데이터베이스 URL (예: jdbc:mysql://localhost:3306/mydatabase)
+    driver-class-name: org.mariadb.jdbc.Driver  # MariaDB JDBC 드라이버
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
