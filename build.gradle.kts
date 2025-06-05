@@ -43,7 +43,7 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-    runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")  // MariaDB JDBC 커넥터
     runtimeOnly("org.xerial:sqlite-jdbc:3.45.1.0") // 최신 버전 사용
 
     // jwt

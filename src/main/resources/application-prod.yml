@@ -1,0 +1,28 @@
+spring:
+  sql:
+    init:
+      mode: embedded
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        globally_quoted_identifiers: true
+    show-sql: false  # SQL 로그 비활성화
+    generate-ddl: false  # DDL 생성 비활성화 (자동 테이블 생성을 피하기 위해)
+
+  datasource:
+    url: ${DB_URL}  # MariaDB 데이터베이스 URL (예: jdbc:mysql://localhost:3306/mydatabase)
+    driver-class-name: org.mariadb.jdbc.Driver  # MariaDB JDBC 드라이버
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 10  # 적절한 커넥션 풀 크기 설정
+      minimum-idle: 5  # 최소 유휴 커넥션 수
+      idle-timeout: 30000  # 유휴 커넥션 타임아웃
+      max-lifetime: 600000  # 커넥션 최대 수명
+      connection-timeout: 30000  # 커넥션 타임아웃
