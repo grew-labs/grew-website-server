@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class PostResponseDto(
     val postId: Long,
     val title: String,
-    val contents: List<PostContentDto>,
+    val content: String,
     val updatedAt: LocalDateTime
 ) {
 
@@ -15,7 +15,7 @@ data class PostResponseDto(
             return PostResponseDto(
                 postId = entity.postId,
                 title = entity.title,
-                contents = entity.contents.map { PostContentDto.from(jsonString = it) },
+                content = entity.content,
                 updatedAt = entity.updatedAt
             )
         }

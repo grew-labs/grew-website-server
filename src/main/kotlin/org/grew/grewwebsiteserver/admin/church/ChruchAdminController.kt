@@ -52,9 +52,9 @@ class ChruchAdminController(
                 )
             ]
         ),
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     fun addChruch(@RequestBody churchInfo: PostChurchRequestDto): ResponseEntity<ApiResponse<PostChurchResponseDto>> {
         val churchResponse = churchAdminService.addChurch(churchInfo)
         return ResponseEntity.ok(
@@ -109,9 +109,9 @@ class ChruchAdminController(
                 )
             ]
         ),
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     fun updateChurch(
         @PathVariable id: Long,
         @RequestBody churchInfo: PostChurchRequestDto
@@ -138,9 +138,9 @@ class ChruchAdminController(
                 example = "1"
             )
         ],
-        security = [SecurityRequirement(name = "Authorization")]
+        // security = [SecurityRequirement(name = "Authorization")]
     )
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     fun deleteChurch(@PathVariable id: Long): ResponseEntity<ApiResponse<Unit>> {
         churchAdminService.deleteChurch(id)
         return ResponseEntity.ok(
