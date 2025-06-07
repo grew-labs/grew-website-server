@@ -24,11 +24,11 @@ data class User(
     val userId: Long? = null,  // 카카오 고유 ID
 
     @Column(unique = true, length = 100)
-    val email: String? = null,
+    var email: String? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 20)
-    val role: UserRole = UserRole.USER, // 기본값은 USER로 설정
+    var role: UserRole = UserRole.USER, // 기본값은 USER로 설정
 
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),

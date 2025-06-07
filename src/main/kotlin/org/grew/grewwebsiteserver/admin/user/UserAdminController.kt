@@ -8,7 +8,6 @@ import org.grew.grewwebsiteserver.common.Response
 import org.grew.grewwebsiteserver.common.ResponseDto
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import java.lang.IllegalArgumentException
 import io.swagger.v3.oas.annotations.parameters.RequestBody as SwaggerRequestBody
 
 @RestController
