@@ -12,7 +12,7 @@ import io.jsonwebtoken.security.Keys
 
 class JwtServiceTest {
 
-    private val secret = "aHR0cHM6Ly9ncmV3Lm9yZy9zZWNyZXQxM3Lm9yZy9zZWNyZXQxM3Lm9yZy9zZWNyZXQxM3Lm9yZy9zZWNyZXQxMjM0NTY="  // 예시 BASE64 인코딩된 키 (길이 충분히 확보)
+    private val secret = "abc"  // 예시 BASE64 인코딩된 키 (길이 충분히 확보)
     private val key: Key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
 
     @Test
