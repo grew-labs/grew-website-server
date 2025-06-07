@@ -28,10 +28,10 @@ class Response {
 
         // statusCode: 500
         fun <T> unexpectedException(e: Exception): ResponseEntity<Body<T>> {
-            val body = Body<T>(result = "FAILURE", data = null, errorCode = "UNEXPECTED_EXCEPTION", errorMessage = e.message)
+            val body =
+                Body<T>(result = "FAILURE", data = null, errorCode = "UNEXPECTED_EXCEPTION", errorMessage = e.message)
             return ResponseEntity.status(500).body(body)
         }
     }
 }
 
-typealias ResponseDto<T> = ResponseEntity<Response.Body<T>>

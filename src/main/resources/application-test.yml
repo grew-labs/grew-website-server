@@ -45,3 +45,6 @@ cloud:
       static: ap-northeast-2  # 예: 서울 리전
     s3:
       bucket: grew-website-resource
+
+cors:
+  allowed-origins: http://localhost:3000
