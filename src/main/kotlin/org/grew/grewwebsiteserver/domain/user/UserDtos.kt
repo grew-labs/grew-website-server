@@ -19,3 +19,13 @@ data class UserResponseDto(
         }
     }
 }
+
+data class UserRoleResponseDto(
+    val role: String
+) {
+    companion object {
+        fun from(user: User): UserRoleResponseDto {
+            return UserRoleResponseDto(user.role.name)
+        }
+    }
+}
