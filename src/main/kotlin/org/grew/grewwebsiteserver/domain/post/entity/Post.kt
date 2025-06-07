@@ -1,7 +1,6 @@
 package org.grew.grewwebsiteserver.domain.post.entity
 
 import jakarta.persistence.*
-import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
 
 @Entity
@@ -14,10 +13,10 @@ data class Post(
     @Column(nullable = true, unique = false)
     val userId: Long?,
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false, unique = false, columnDefinition = "TEXT")
     var title: String,
 
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false, unique = false, columnDefinition = "TEXT")
     var content: String,
 
     @Column(name = "created_at", updatable = false)

@@ -6,7 +6,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate # DDL 자동 생성 비활성화 (테이블 생성 방지)
     properties:
       hibernate:
         format_sql: true
