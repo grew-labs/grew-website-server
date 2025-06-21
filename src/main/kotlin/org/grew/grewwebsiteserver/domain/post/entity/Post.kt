@@ -17,6 +17,7 @@ data class Post(
     var content: String,
 
     @Column(nullable = false, unique = false)
+    @Enumerated(EnumType.STRING)
     var category: PostCategory,
 
     @Column(nullable = false, unique = false)
