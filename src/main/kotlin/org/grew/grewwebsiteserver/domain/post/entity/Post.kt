@@ -10,9 +10,6 @@ data class Post(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val postId: Long = 0,
 
-    @Column(nullable = true, unique = false)
-    val userId: Long?,
-
     @Column(nullable = false, unique = false, columnDefinition = "TEXT")
     var title: String,
 
