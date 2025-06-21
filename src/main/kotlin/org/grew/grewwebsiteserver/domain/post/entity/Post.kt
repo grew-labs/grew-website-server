@@ -19,16 +19,27 @@ data class Post(
     @Column(nullable = false, unique = false, columnDefinition = "TEXT")
     var content: String,
 
+    @Column(nullable = false, unique = false)
+    var category: PostCategory,
+
+    @Column(nullable = false, unique = false)
+    var authorUserId: Long,
+
+    @Column(nullable = false, unique = false)
+    var authorName: String,
+
     @Column(name = "created_at", updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "updated_at")
-    var updatedAt: LocalDateTime = LocalDateTime.now()
+    var updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
-    fun update(title: String, content: String) {
+    fun update(title: String, content: String, authorUserId: Long, authorName: String) {
         this.title = title
         this.content = content
+        this.authorUserId = authorUserId
+        this.authorName = authorName
         this.updatedAt = LocalDateTime.now()
     }
 }

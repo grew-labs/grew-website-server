@@ -1,9 +1,11 @@
 package org.grew.grewwebsiteserver.domain.post
 
 import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
+import org.grew.grewwebsiteserver.domain.post.dto.PostListRequestDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
 import org.grew.grewwebsiteserver.domain.post.entity.Post
+import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
@@ -11,8 +13,13 @@ import kotlin.jvm.optionals.getOrNull
 class PostService(
     private val postRepository: PostRepository
 ) {
-    fun getPosts(): List<PostResponseDto> {
-        return postRepository.findAll().toList().map { PostResponseDto.from(entity = it) }
+    fun getPosts(request: PostListRequestDto): List<PostResponseDto> {
+        val posts = if (request.category != null) {
+            postRepository.findAllByCategory(category = request.category).toList()
+        } else {
+            postRepository.findAll().toList()
+        }
+        return posts.map { PostResponseDto.from(it) }
     }
 
     fun getPostByPostId(postId: Long): PostResponseDto {
@@ -21,20 +28,27 @@ class PostService(
         return PostResponseDto.from(entity = entity)
     }
 
-    fun createPost(request: PostCreateRequestDto): PostResponseDto {
+    fun createPost(request: PostCreateRequestDto, creator: User): PostResponseDto {
         val entity = Post(
-            userId = null,
             title = request.title,
-            content = request.content
+            category = request.category,
+            content = request.content,
+            authorUserId = creator.userId ?: -1,
+            authorName = creator.name
         )
         postRepository.save(entity)
         return PostResponseDto.from(entity = entity)
     }
 
-    fun updatePost(postId: Long, request: PostUpdateRequestDto): PostResponseDto {
+    fun updatePost(postId: Long, request: PostUpdateRequestDto, editor: User): PostResponseDto {
         val entity = postRepository.findById(postId).getOrNull()
             ?: throw IllegalArgumentException("id에 해당하는 게시물이 없습니다.")
-        entity.update(title = request.title, content = request.content)
+        entity.update(
+            title = request.title,
+            content = request.content,
+            authorUserId = editor.userId ?: -1,
+            authorName = editor.name
+        )
         return PostResponseDto.from(entity = entity)
     }
 
