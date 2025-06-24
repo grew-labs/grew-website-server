@@ -11,7 +11,8 @@ import kotlin.jvm.optionals.getOrNull
 class PostService(
     private val postRepository: PostRepository
 ) {
-    fun getPosts(category: PostCategory): List<PostResponseDto> {
+    fun getPosts(categoryString: String): List<PostResponseDto> {
+        val category = enumValueOf<PostCategory>(categoryString)
         return postRepository.findAllByCategory(category = category).map { PostResponseDto.from(it) }
     }
 

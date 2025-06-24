@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.grew.grewwebsiteserver.common.Response
 import org.grew.grewwebsiteserver.common.ResponseDto
 import org.grew.grewwebsiteserver.domain.post.dto.*
+import org.grew.grewwebsiteserver.domain.post.entity.Post
 import org.grew.grewwebsiteserver.domain.post.entity.PostCategory
 import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springframework.data.jpa.repository.Query
@@ -40,10 +41,9 @@ class PostController(
         summary = "게시글 목록 조회",
         description = "전체 게시글 목록을 조회합니다."
     )
-    fun getPosts(@RequestParam category: PostCategory): ResponseDto<List<PostResponseDto>> {
+    fun getPosts(@RequestParam category: String): ResponseDto<List<PostResponseDto>> {
         return try {
-            println("xxx: ${category}")
-            val data = postService.getPosts(category = category)
+            val data = postService.getPosts(categoryString = category)
             Response.success(data)
         }  catch (e: Exception) {
             Response.unexpectedException(e)
