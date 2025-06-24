@@ -4,11 +4,10 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.grew.grewwebsiteserver.common.Response
 import org.grew.grewwebsiteserver.common.ResponseDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostListRequestDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
+import org.grew.grewwebsiteserver.domain.post.dto.*
+import org.grew.grewwebsiteserver.domain.post.entity.PostCategory
 import org.grew.grewwebsiteserver.domain.user.entity.User
+import org.springframework.data.jpa.repository.Query
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -41,9 +40,10 @@ class PostController(
         summary = "게시글 목록 조회",
         description = "전체 게시글 목록을 조회합니다."
     )
-    fun getPosts(@RequestBody request: PostListRequestDto): ResponseDto<List<PostResponseDto>> {
+    fun getPosts(@RequestParam category: PostCategory): ResponseDto<List<PostResponseDto>> {
         return try {
-            val data = postService.getPosts(request = request)
+            println("xxx: ${category}")
+            val data = postService.getPosts(category = category)
             Response.success(data)
         }  catch (e: Exception) {
             Response.unexpectedException(e)

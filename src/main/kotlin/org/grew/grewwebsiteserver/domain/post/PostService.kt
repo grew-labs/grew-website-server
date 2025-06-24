@@ -1,10 +1,8 @@
 package org.grew.grewwebsiteserver.domain.post
 
-import org.grew.grewwebsiteserver.domain.post.dto.PostCreateRequestDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostListRequestDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostResponseDto
-import org.grew.grewwebsiteserver.domain.post.dto.PostUpdateRequestDto
+import org.grew.grewwebsiteserver.domain.post.dto.*
 import org.grew.grewwebsiteserver.domain.post.entity.Post
+import org.grew.grewwebsiteserver.domain.post.entity.PostCategory
 import org.grew.grewwebsiteserver.domain.user.entity.User
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
@@ -13,13 +11,8 @@ import kotlin.jvm.optionals.getOrNull
 class PostService(
     private val postRepository: PostRepository
 ) {
-    fun getPosts(request: PostListRequestDto): List<PostResponseDto> {
-        val posts = if (request.category != null) {
-            postRepository.findAllByCategory(category = request.category).toList()
-        } else {
-            postRepository.findAll().toList()
-        }
-        return posts.map { PostResponseDto.from(it) }
+    fun getPosts(category: PostCategory): List<PostResponseDto> {
+        return postRepository.findAllByCategory(category = category).map { PostResponseDto.from(it) }
     }
 
     fun getPostByPostId(postId: Long): PostResponseDto {
