@@ -31,3 +31,5 @@ cloud:
     s3:
       bucket: grew-website-resource
 
+cors:
+  allowed-origins-pattern: ${CORS_ALLOWED_ORIGINS_PATTERN}

@@ -52,9 +52,9 @@ class ChruchAdminController(
                 )
             ]
         ),
-        // security = [SecurityRequirement(name = "Authorization")]
+         security = [SecurityRequirement(name = "Authorization")]
     )
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     fun addChruch(@RequestBody churchInfo: PostChurchRequestDto): ResponseEntity<ApiResponse<PostChurchResponseDto>> {
         val churchResponse = churchAdminService.addChurch(churchInfo)
         return ResponseEntity.ok(

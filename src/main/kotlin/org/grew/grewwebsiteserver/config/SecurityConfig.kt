@@ -1,6 +1,7 @@
 package org.grew.grewwebsiteserver.config
 
 import org.grew.grewwebsiteserver.domain.auth.JwtAuthenticationFilter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -17,7 +18,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableMethodSecurity
 class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter // JWT 필터 주입
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    @Value("\${cors.allowed-origins-pattern}")
+    private val allowedOriginsPatternRaw: String
 ) {
 
     @Bean
@@ -27,7 +30,7 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .cors { } // CORS 활성화
-            
+
             // CSRF 설정
             .csrf { it.disable() } // CSRF 비활성화
 
@@ -49,22 +52,25 @@ class SecurityConfig(
             }
 
             // JWT 인증 필터 추가
-            .addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter::class.java
+            )
 
         return http.build()
     }
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:3000")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-        configuration.allowedHeaders = listOf("*")
-        configuration.allowCredentials = true
-
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
+        val configuration = CorsConfiguration().apply {
+            allowedOriginPatterns = allowedOriginsPatternRaw.split(",").map { it.trim() }
+            allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("*")
+            allowCredentials = true
+        }
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", configuration)
+        }
     }
 
     @Bean
